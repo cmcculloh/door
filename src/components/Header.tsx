@@ -12,7 +12,7 @@ const Header: FC = () => {
 			<div className="topnav">
 				<nav>
 					<h1>Daily Reading</h1>
-					<input id="menu__toggle" type="checkbox" checked={isChecked} />
+					<input id="menu__toggle" type="checkbox" checked={isChecked} readOnly/>
 					<label className="menu__btn" htmlFor="menu__toggle">
 						<span />
 					</label>
