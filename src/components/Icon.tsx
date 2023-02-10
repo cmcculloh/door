@@ -20,7 +20,7 @@ const Icon: FC<Props> = ({ size="default", type, color="default", classNames="",
 					xlinkHref={`/salesforce-lightning-design-system-icons/utility-sprite/svg/symbols.svg#${type}`}
 				/>
 			</svg>
-			<span className="slds-assistive-text">${description}</span>
+			<span className="slds-assistive-text">{description}</span>
 		</span>
 	);
 };

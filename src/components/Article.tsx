@@ -26,7 +26,7 @@ const Article: FC<Props> = ({ title, date, content, source }) => {
 				/>
 			</header>
 			<div className={collapsed ? "slds-hide" : ""}>
-				{content}
+				<div dangerouslySetInnerHTML={{__html: content }} />
 				<p className="source">
 					Original Source: <a href={source}>{source}</a>
 				</p>
@@ -34,3 +34,5 @@ const Article: FC<Props> = ({ title, date, content, source }) => {
 		</article>
 	);
 }
+
+export default Article;
