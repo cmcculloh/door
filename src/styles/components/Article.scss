@@ -1,0 +1,36 @@
+	article:first-child header {
+		margin-top: 0 !important;
+	}
+
+	header {
+		background: var(--color-bg-0);
+		color: var(--color-theme-1);
+		padding: 1px 10px;
+		border-bottom: 1px solid grey;
+	}
+
+	h2 {
+		margin-left: 20px;
+		font-size: 1.3rem;
+	}
+
+	.source {
+		font-size: 0.7rem;
+	}
+
+	a {
+		color: var(--color-theme-1);
+	}
+
+	a:visited {
+		color: #aaa;
+	}
+
+	div {
+		margin: 20px;
+		margin-bottom: 50px;
+	}
+
+	.collapsed div {
+		display: none;
+	}
