@@ -10,7 +10,7 @@ type Props = {
 }
 
 const Article: FC<Props> = ({ title, date, content, source }) => {
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     const toggleContent = () => {
         setCollapsed(!collapsed);
     }
