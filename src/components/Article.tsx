@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useState } from 'react';
 import Icon from './Icon';
 
 type Props = {
@@ -9,9 +10,10 @@ type Props = {
 }
 
 const Article: FC<Props> = ({ title, date, content, source }) => {
-    let collapsed = true;
-    const toggleContent = () => (collapsed = !collapsed);
-
+    const [collapsed, setCollapsed] = useState(true);
+    const toggleContent = () => {
+        setCollapsed(!collapsed);
+    }
     return (
 		<article>
 			<header
