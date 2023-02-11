@@ -1,34 +1,33 @@
-import { FC } from "react";
+import useSwr from "swr";
 import Head from "next/head";
 import Article from "../components/Article";
 
-import { getDailyReadings } from "../lib/readings";
+import getDailyReadings from "../lib/getDailyReadings";
 
 type post = {
 	title: string;
 	date: string;
-	text: string;
+	contents: string;
 	source: string;
 };
 
 type dataType = {
-	posts: post[];
+	readings: post[];
 };
 
 type Props = {
 	data: dataType;
 };
 
-export async function getStaticProps() {
-	const data = await getDailyReadings();
-	return {
-		props: {
-			data,
-		},
-	};
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home: FC<Props> = ({ data }) => {
+export default function Home() {
+  const { data, error, isLoading } = useSwr<dataType>("/api/readings", fetcher);
+
+  if (error) return <div>Failed to load users</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (!data) return null;
+
 	return (
 		<>
 			<Head>
@@ -38,12 +37,12 @@ const Home: FC<Props> = ({ data }) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<main>
-				{data.posts.map((post: post, index: number) => (
+				{data.readings.map((post: post, index: number) => (
 					<Article
 						key={index}
 						title={post.title}
 						date={post.date}
-						content={post.text}
+						contents={post.contents}
 						source={post.source}
 					/>
 				))}
@@ -51,5 +50,3 @@ const Home: FC<Props> = ({ data }) => {
 		</>
 	);
 }
-
-export default Home;

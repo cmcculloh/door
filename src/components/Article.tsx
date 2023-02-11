@@ -5,11 +5,11 @@ import Icon from './Icon';
 type Props = {
     title: string;
     date: string;
-    content: string;
+    contents: string;
     source: string;
 }
 
-const Article: FC<Props> = ({ title, date, content, source }) => {
+const Article: FC<Props> = ({ title, date, contents, source }) => {
     const [collapsed, setCollapsed] = useState(false);
     const toggleContent = () => {
         setCollapsed(!collapsed);
@@ -28,7 +28,7 @@ const Article: FC<Props> = ({ title, date, content, source }) => {
 				/>
 			</header>
 			<div className={collapsed ? "slds-hide" : ""}>
-				<div dangerouslySetInnerHTML={{__html: content }} />
+				<div dangerouslySetInnerHTML={{__html: contents }} />
 				<p className="source">
 					Original Source: <a href={source}>{source}</a>
 				</p>

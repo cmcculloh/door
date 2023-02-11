@@ -1,12 +1,8 @@
-const getDailyReadings = async () => {
-//   const res = await fetch('https://api.orthodoxwiki.org/api.php?action=parse&page=Daily_Readings&format=json');
-//   const data = await res.json();
-
-    const data = {
-		posts: [
-			{
-				title: "John 21:15-25 (11th Matins Gospel)",
-				text: `<dl class="reading">
+const data = {
+	readings: [
+		{
+			title: "John 21:15-25 (11th Matins Gospel)",
+			contents: `<dl class="reading">
 											<dt>15</dt>
 						<dd>So when they had eaten breakfast, Jesus said to Simon Peter, “Simon, son of Jonah, do you love Me more than these?” He said to Him, “Yes, Lord; You know that I love You.” He said to him, “Feed My lambs.”</dd>
 											<dt>16</dt>
@@ -30,11 +26,12 @@ const getDailyReadings = async () => {
 											<dt>25</dt>
 						<dd>And there are also many other things that Jesus did, which if they were written one by one, I suppose that even the world itself could not contain the books that would be written. Amen.</dd>
 									</dl>`,
-				source: "https://www.oca.org/readings/daily/2023/01/29/1",
-			},
-			{
-				title: "1 Timothy 4:9-15 (Epistle)",
-				text: `<dl class="reading">
+			source: "https://www.oca.org/readings/daily/2023/01/29/1",
+            date: "01/29/2023"
+		},
+		{
+			title: "1 Timothy 4:9-15 (Epistle)",
+			contents: `<dl class="reading">
 											<dt>9</dt>
 						<dd>This is a faithful saying and worthy of all acceptance.</dd>
 											<dt>10</dt>
@@ -50,11 +47,12 @@ const getDailyReadings = async () => {
 											<dt>15</dt>
 						<dd>Meditate on these things; give yourself entirely to them, that your progress may be evident to all.</dd>
 									</dl>`,
-				source: "https://www.oca.org/readings/daily/2023/01/29/2",
-			},
-			{
-				title: "Luke 19:1-10 (Gospel)",
-				text: `<dl class="reading">
+			source: "https://www.oca.org/readings/daily/2023/01/29/2",
+            date: "01/29/2023"
+		},
+		{
+			title: "Luke 19:1-10 (Gospel)",
+			contents: `<dl class="reading">
 											<dt>1</dt>
 						<dd>Then Jesus entered and passed through Jericho.</dd>
 											<dt>2</dt>
@@ -76,11 +74,12 @@ const getDailyReadings = async () => {
 											<dt>10</dt>
 						<dd>for the Son of Man has come to seek and to save that which was lost.”</dd>
 									</dl>`,
-				source: "https://www.oca.org/readings/daily/2023/01/29/3",
-			},
-			{
-				title: "Sunday of Zacchaeus",
-				text: `<article>
+			source: "https://www.oca.org/readings/daily/2023/01/29/3",
+            date: "01/29/2023"
+		},
+		{
+			title: "Sunday of Zacchaeus",
+			contents: `<article>
 		<header id="content-header">
 			<time datetime="01-29">
 				Commemorated on <a href="https://www.oca.org/saints/lives/2023/01/29">January 29</a>
@@ -92,11 +91,12 @@ const getDailyReadings = async () => {
 					<a rel="featured-saint" href="https://images.oca.org/icons/lg/prelent/zacchaeus.jpg"><img src="https://images.oca.org/icons/sm/prelent/zacchaeus.jpg"></a>				</span>
 											</figure>
 				<p>The paschal season of the Church is preceded by the season of Great Lent, which is also preceded by its own liturgical preparation. The first sign of the approach of Great Lent comes five Sundays before its beginning. On this Sunday the Gospel reading is about Zacchaeus the tax-collector. It tells how Christ brought salvation to the sinful man, and how his life was changed simply because he “sought to see who Jesus was” (Luke 19:3). The desire and effort to see Jesus begins the entire movement through Lent towards Pascha. It is the first movement of salvation.</p><p>Our lenten journey begins with a recognition of our own sinfulness, just as Zacchaeus recognized his. He promised to make restitution by giving half of his wealth to the poor, and by paying to those he had falsely accused four times as much as they had lost. In this, he went beyond the requirements of the Law (Ex. 22:3-12).</p><p>The example of Zacchaeus teaches us that we should turn away from our sins, and atone for them. The real proof of our sorrow and repentance is not just a verbal apology, but when we correct ourselves and try to make amends for the consequences of our evil actions. </p><p>We are also assured of God’s mercy and compassion by Christ’s words to Zacchaeus, “Today salvation is come to this house” (Luke 19:9). After the Great Doxology and Trisagion at Sunday Matins (when the Tone of the week is in Tone 1, 3, 5, or 7) we sing the Troparion of the Resurrection: “Today salvation is come to the world, let us sing praises to Him Who arose from the tomb, and is the Author of our life. For having destroyed death by death, He has given us the victory and great mercy.”</p><p>Zacchaeus was short, so he climbed a tree in order to see the Lord. All of us have sinned and come short of the glory of God (Rom. 3:23).  We are also short in our spiritual stature, therefore we must climb the ladder of the virtues. In other words, we must prepare for spiritual effort and growth.</p><p>Saint Zacchaeus is also commemorated on April 20.		</p></article>`,
-				source: "https://www.oca.org/saints/lives/2023/01/29/1-sunday-of-zacchaeus",
-			},
-			{
-				title: "Translation of the relics of the Hieromartyr Ignatius, the Godbearer and Bishop of Antioch",
-				text: `<article>
+			source: "https://www.oca.org/saints/lives/2023/01/29/1-sunday-of-zacchaeus",
+            date: "01/29/2023"
+		},
+		{
+			title: "Translation of the relics of the Hieromartyr Ignatius, the Godbearer and Bishop of Antioch",
+			contents: `<article>
 		<header id="content-header">
 			<time datetime="01-29">
 				Commemorated on <a href="https://www.oca.org/saints/lives/2023/01/29">January 29</a>
@@ -109,11 +109,12 @@ const getDailyReadings = async () => {
 												<p><a href="https://www.oca.org/saints/troparia/2023/01/29/100335-translation-of-the-relics-of-the-hieromartyr-ignatius-the-godbea" class="button"><span>Troparion &amp; Kontakion</span></a></p>
 							</figure>
 				<p>The Transfer of the Relics of the Hieromartyr Ignatius the God-Bearer: (See December 20). After the holy hieromartyr Ignatius was thrown to the lions in the year 107 on the orders of the emperor Trajan, Christians gathered up his bones and preserved them at Rome.</p><p>Later, in the year 108, the saint’s relics were collected and buried outside the gate of Daphne at Antioch. A second transfer, to the city of Antioch itself, took place in the year 438. After the capture of Antioch by the Persians, the relics of the Hieromartyr Ignatius were returned to Rome and placed into the church of the holy Hieromartyr Clement in the year 540 (in 637, according to other sources).</p><p>Saint Ignatius introduced antiphonal singing into Church services. He has left us seven archpastoral epistles in which he provided instructions on faith, love and good works. He also urged his flock to preserve the unity of the faith and to beware of heretics. He encouraged people to honor and obey their bishops, “We should regard the bishop as we would the Lord Himself.” (To the Ephesians 6)</p><p>In his Letter to Polycarp, Saint Ignatius writes: “Listen to the bishop, if you want God to listen to you... let your baptism be your shield, your faith a helmet, your charity a spear, your patience, like full armor.” (Compare Eph. 6:14-17 and the Wisdom of Solomon 5:17-20. Also <em>The Ladder</em> 4:2)		</p></article>`,
-				source: "https://www.oca.org/saints/lives/2023/01/29/100335-translation-of-the-relics-of-the-hieromartyr-ignatius-the-godbea",
-			},
-			{
-				title: "Saint Laurence, Recluse of the Kiev Caves, Far Caves, and Bishop of Turov",
-				text: `<article>
+			source: "https://www.oca.org/saints/lives/2023/01/29/100335-translation-of-the-relics-of-the-hieromartyr-ignatius-the-godbea",
+            date: "01/29/2023"
+		},
+		{
+			title: "Saint Laurence, Recluse of the Kiev Caves, Far Caves, and Bishop of Turov",
+			contents: `<article>
 		<header id="content-header">
 			<time datetime="01-29">
 				Commemorated on <a href="https://www.oca.org/saints/lives/2023/01/29">January 29</a>
@@ -124,11 +125,12 @@ const getDailyReadings = async () => {
 												<p><a href="https://www.oca.org/saints/troparia/2023/01/29/100336-saint-laurence-recluse-of-the-kiev-caves-far-caves-and-bishop-of" class="button"><span>Troparion &amp; Kontakion</span></a></p>
 							</figure>
 				<p>Saint Laurence, Hermit of the Caves and Bishop of Turov, in the Near Caves at first lived as a hermit at the monastery of the Great Martyr Demetrius, built by Great Prince Izyaslav at Kiev near the Monastery of the Caves. Later, he transferred to the Kiev Caves monastery, and was glorified by a gift of healing.</p><p>He was elevated to the See of Turov in 1182 (Turov is a city in the Minsk region), and was a successor of Saint Cyril of Turov (April 28). He died in 1194, and was buried in the Near Caves. His memory is celebrated also on September 28 and on the second Sunday of Great Lent.		</p></article>`,
-				source: "https://www.oca.org/saints/lives/2023/01/29/100336-saint-laurence-recluse-of-the-kiev-caves-far-caves-and-bishop-of",
-			},
-			{
-				title: "Tenth Anniversary of the Enthronement of His Beatitude Metropolitan Tikhon",
-				text: `<article class="clearfix">
+			source: "https://www.oca.org/saints/lives/2023/01/29/100336-saint-laurence-recluse-of-the-kiev-caves-far-caves-and-bishop-of",
+            date: "01/29/2023"
+		},
+		{
+			title: "Tenth Anniversary of the Enthronement of His Beatitude Metropolitan Tikhon",
+			contents: `<article class="clearfix">
 		<header>
 			<time datetime="2023-01-27">January 27, 2023 </time>
 		</header>
@@ -151,11 +153,12 @@ const getDailyReadings = async () => {
 <p><a class="button" href="https://www.oca.org/holy-synod/bishops/the-most-blessed-tikhon"><span>Read His Beatitude’s biography</span></a></p>
 
 	</article>`,
-				source: "https://www.oca.org/news/headline-news/tenth-anniversary-of-the-enthronement-of-his-beatitude-metropolitan-tikhon",
-			},
-			{
-				title: "“Corrective Baptism”?",
-				text: `<article id="post-2377" class="post-2377 post type-post status-publish format-standard hentry category-uncategorized">
+			source: "https://www.oca.org/news/headline-news/tenth-anniversary-of-the-enthronement-of-his-beatitude-metropolitan-tikhon",
+            date: "01/29/2023"
+		},
+		{
+			title: "“Corrective Baptism”?",
+			contents: `<article id="post-2377" class="post-2377 post type-post status-publish format-standard hentry category-uncategorized">
 	<header class="entry-header">		<div class="entry-meta">
 			<span class="posted-on"><time class="entry-date published" datetime="2023-01-26T10:02:23-08:00">January 26, 2023</time><time class="updated" datetime="2023-01-26T10:03:44-08:00">January 26, 2023</time></span> · <span class="byline"> <span class="author vcard"><a class="url fn n" href="https://blogs.ancientfaith.com/nootherfoundation/author/nootherfoundation/">Fr. Lawrence Farley</a></span></span>		</div><!-- .entry-meta -->
 			</header><!-- .entry-header -->
@@ -177,21 +180,19 @@ const getDailyReadings = async () => {
 <p>The practice of “corrective baptism” is dangerous because it suggests an unworthy and legalistic view of God.&nbsp; It verges on turning sacraments into magic, and liturgical words into verbal spells.&nbsp; As said above, I would be quite happy to baptize pretty much everyone.&nbsp; But the God whom we serve, in both baptism and chrismation, is no legalist, but the God of grace, the One who accepted the penitent thief into paradise without any ceremony, and One who wants all to be saved. Those promoting corrective baptism not only disturb the peace of the Church and seek to usurp the place of its bishops.&nbsp; They also offer an unworthy picture of God.</p>
 	</div><!-- .entry-content -->
 </article>`,
-				source: "https://blogs.ancientfaith.com/nootherfoundation/corrective-baptism/",
-			},
-			{
-				title: "Martyrdom of Polycarp",
-				text: `<h3>Chapter I.—Subject of which we write.</h3>
+			source: "https://blogs.ancientfaith.com/nootherfoundation/corrective-baptism/",
+            date: "01/29/2023"
+		},
+		{
+			title: "Martyrdom of Polycarp",
+			contents: `<h3>Chapter I.—Subject of which we write.</h3>
 <p>We have written to you, brethren, as to what relates to the martyrs, and especially to the blessed Polycarp, who put an end to the persecution, having, as it were, set a seal upon it by his martyrdom. For almost all the events that happened previously [to this one], took place that the Lord might show us from above a martyrdom becoming the Gospel. For he waited to be delivered up, even as the Lord had done, that we also might become his followers, while we look not merely at what concerns ourselves but have regard also to our neighbours. For it is the part of a true and well-founded love, not only to wish one’s self to be saved, but also all the brethren.</p>
 	<h3>Chapter II.—The wonderful constancy of the martyrs.</h3>
 <p>All the martyrdoms, then, were blessed and noble which took place according to the will of God. For it becomes us who profess422 greater piety than others, to ascribe the authority over all things to God. And truly,423 who can fail to admire their nobleness of mind, and their patience, with that love towards their Lord which they displayed?—who, when they were so torn with scourges, that the frame of their bodies, even to the very inward veins and arteries, was laid open, still patiently endured, while even those that stood by pitied and bewailed them. But they reached such a pitch of magnanimity, that not one of them let a sigh or a groan escape them; thus proving to us all that those holy martyrs of Christ, at the very time when they suffered such torments, were absent from the body, or rather, that the Lord then stood by them, and communed with them. And, looking to the grace of Christ, they despised all the torments of this world, redeeming themselves from eternal punishment by [the suffering of] a single hour. For this reason the fire of their savage executioners appeared cool to them. For they kept before their view escape from that fire which is eternal and never shall be quenched, and looked forward with the eyes of their heart to those good things which are laid up for such as endure; things “which ear hath not heard, nor eye seen, neither have entered into the heart of man,”424 but were revealed by the Lord to them, inasmuch as they were no longer men, but had already become angels. And, in like manner, those who were condemned to the wild beasts endured dreadful tortures, being stretched out upon beds full of spikes, and subjected to various other kinds of torments, in order that, if it were possible, the tyrant might, by their lingering tortures, lead them to a denial [of Christ].</p>`,
-				source: "https://ccel.org/ccel/polycarp/martyrdom_of_polycarp/anf01.iv.iv.ii.html",
-			},
-		],
-	};
+			source: "https://ccel.org/ccel/polycarp/martyrdom_of_polycarp/anf01.iv.iv.ii.html",
+            date: "01/29/2023"
+		},
+	],
+};
 
-
-  return data;
-}
-
-export { getDailyReadings };
+export default data;
