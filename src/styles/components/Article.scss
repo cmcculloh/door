@@ -2,7 +2,7 @@
 		margin-top: 0 !important;
 	}
 
-	header {
+	article > header {
 		background: var(--color-bg-0);
 		color: var(--color-theme-1);
 		padding: 1px 10px;
@@ -26,7 +26,7 @@
 		color: #aaa;
 	}
 
-	div {
+	article > div {
 		margin: 20px;
 		margin-bottom: 50px;
 	}
