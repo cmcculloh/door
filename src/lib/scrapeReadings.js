@@ -2,11 +2,16 @@
 const fs = require("fs");
 const { chromium } = require("playwright");
 
-const scrapeReadings = async () => {
-	const browser = await chromium.launch({ headless: false });
-	const page = await browser.newPage();
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth() + 1;
+const day = today.getDate();
 
-	await page.goto("https://www.oca.org/readings");
+// today in YYYY/MM/DD format
+const todayString = `${year}/${month}/${day}`;
+
+const scrapeReadingsForDay = async (page, readings = [], day = todayString, counter = 0) => {
+	await page.goto(`https://www.oca.org/readings/daily/${day}`);
 
 	const links = await page.$$eval("#main-col-contents > section > ul a", (as) =>
 		as.map((a) => a.href)
@@ -14,16 +19,12 @@ const scrapeReadings = async () => {
 
 	console.log("links", links);
 
-	// get current readings from readings.json
-	let readings = [];
-	try {
-		const fileData = fs.readFileSync("readings.json", "utf8");
-		readings = JSON.parse(fileData);
-	} catch (e) {
-		console.log("error reading file", e);
-	}
-
 	for (const link of links) {
+		// wait for a random number of seconds between 1 and 26
+		const waitTime = Math.floor(Math.random() * 3) + 1;
+		console.log("waiting", waitTime, "seconds");
+		await page.waitForTimeout(waitTime * 1000);
+
 		// follow link
 		await page.goto(link);
 
@@ -58,83 +59,45 @@ const scrapeReadings = async () => {
 		readings.push(reading);
 	}
 
-	fs.writeFileSync("readings.json", JSON.stringify(readings, null, "\t"));
+	// get date of day + 1 in YYYY/MM/DD format
+	const nextDay = new Date(day);
+	nextDay.setDate(nextDay.getDate() + 1);
+	const nextDayYear = nextDay.getFullYear();
+	const nextDayMonth = nextDay.getMonth() + 1;
+	const nextDayDay = nextDay.getDate();
+	const nextDayString = `${nextDayYear}/${nextDayMonth}/${nextDayDay}`;
+
+	// if we've scraped 7 days, stop
+	// if (counter === 7) {
+	// 	return readings;
+	// }
+
+	// if year is the next year, stop
+	if (nextDayYear === year + 1) {
+		return readings;
+	}
+
+	return await scrapeReadingsForDay(page, readings, nextDayString, counter + 1);
+};
+
+const scrapeReadings = async () => {
+	const browser = await chromium.launch({ headless: false });
+	const page = await browser.newPage();
+
+	// get current readings from readings.json
+	let readings;
+	try {
+		const fileData = fs.readFileSync(`readings.${year}.json`, "utf8");
+		readings = JSON.parse(fileData);
+	} catch (e) {
+		console.log("error reading file", e);
+	}
+
+	readings.readings = await scrapeReadingsForDay(page, readings.readings);
+
+	fs.writeFileSync(`readings.${year}.json`, JSON.stringify(readings, null, "\t"));
 
 	await browser.close();
 };
 
 scrapeReadings();
-
-// const puppeteer = require("puppeteer");
-// const fs = require("fs");
-
-// const scrapeReading = async (url, page) => {
-// 	console.log("scrape", url);
-// 	await page.goto(url, { waitUntil: "networkidle2" });
-
-// 	console.log("went to", url);
-
-// 	const title = await page.$eval("#main-col-contents h2", (h1) => h1.textContent);
-// 	const date = await page.$eval("#main-col-contents #content-header h2", (h2) => h2.textContent);
-// 	const contents = await page.$eval(
-// 		"#main-col-contents article .reading",
-// 		(dl) => dl.textContent
-// 	);
-// 	const source = url;
-
-// 	const data = {
-// 		title,
-// 		date,
-// 		contents,
-// 		source,
-// 	};
-
-// 	fs.writeFile("readings.json", JSON.stringify(data, null, 4), (err) => {
-// 		if (err) {
-// 			console.error(err);
-// 			return;
-// 		}
-// 		console.log("File successfully written!");
-// 	});
-// };
-
-// const baseURL = "https://www.oca.org/readings";
-
-// const scrapeReadings = async () => {
-// 	const browser = await puppeteer.launch({ headless: false });
-// 	const page = await browser.newPage();
-// 	await page.goto(baseURL);
-
-// 	const readingLinks = await page.$("#main-col-contents section ul");
-// 	const links = await readingLinks.$$eval("a", (as) => as.map((a) => a.href));
-
-// 	const readings = links.map(async (link) => await scrapeReading(link, page));
-
-// 	browser.close();
-// };
-
-// scrapeReadings();
-
-// // Path: src/lib/readings.ts
-// // Compare this snippet from src/pages/api/readings.ts:
-// // // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// // import type { NextApiRequest, NextApiResponse } from "next";
-// //
-// // import readings from "../../lib/readings";
-// //
-// // type ReadingsData = {
-// //     readings: {
-// //         title: string;
-// //         date: string;
-// //         contents: string;
-// //         source: string;
-// //     }[];
-// // };
-// //
-// // export default function handler(req: NextApiRequest, res: NextApiResponse<ReadingsData>) {
-// // 	res.status(200).json(readings);
-// // }
-// //
-// // const readings = require("./readings.json");
-
-// // export default readings;
