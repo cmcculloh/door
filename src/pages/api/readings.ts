@@ -25,6 +25,12 @@ const todaysReadings = {
 	readings: getReadingsMatchingDate(ocaScriptureReadings.readings),
 };
 
+// get oca readings from "../../lib/commemorations.json"
+const commemorations = require(`../../lib/commemorations.${currentYear}.json`);
+
+// get commemorations whose date matches today's date
+todaysReadings.readings.unshift(...getReadingsMatchingDate(commemorations.readings));
+
 // get ocaSaintsReadings from "../../lib/saints.json"
 // const ocaSaintsReadings = require(`../../lib/saints.${currentYear}.json`);
 
@@ -38,6 +44,8 @@ type ReadingsData = {
 		source: string;
 	}[];
 };
+
+console.log("todaysReadings", todaysReadings);
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<ReadingsData>) {
 	res.status(200).json(todaysReadings);
