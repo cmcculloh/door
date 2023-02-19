@@ -30,7 +30,14 @@ const scrapeSaintsForDay = async (page, readings = [], day, counter = 0) => {
 
 			const articles = [];
 
-			document.querySelectorAll("#main-col-contents article p").forEach((p) => {
+			const imgLink = document.querySelector(
+				"#main-col-contents article > figure > span > a"
+			);
+			if (imgLink) {
+				articles.push(`<p>${imgLink.innerHTML}</p>`);
+			}
+
+			document.querySelectorAll("#main-col-contents article > p").forEach((p) => {
 				articles.push(`<p>${p.innerHTML.replace(/[\n\t]/g, "")}</p>`);
 			});
 
@@ -57,9 +64,9 @@ const scrapeSaintsForDay = async (page, readings = [], day, counter = 0) => {
 	const nextDayString = `${nextDayYear}/${nextDayMonth}/${nextDayDay}`;
 
 	// if we've scraped 7 days, stop
-	if (counter === 7) {
-		return readings;
-	}
+	// if (counter === 0) {
+	// 	return readings;
+	// }
 
 	// if year is the next year, stop
 	if (nextDayYear === new Date(day).getFullYear() + 1) {

@@ -8,7 +8,7 @@ const getReadingsMatchingDate = (readings: any, date: Date = new Date()) =>
 
 		// UTCDate is used to compare dates because the date is stored without time which means that it will match tomorrow instead of today in the afternoon/evening
 		return (
-			readingDate.getUTCDate() === date.getUTCDate() &&
+			readingDate.getUTCDate() === date.getDate() &&
 			readingDate.getMonth() === date.getMonth() &&
 			readingDate.getFullYear() === date.getFullYear()
 		);
@@ -45,7 +45,10 @@ type ReadingsData = {
 	}[];
 };
 
-console.log("todaysReadings", todaysReadings);
+// console.log("todaysReadings", todaysReadings);
+// const todaysDate = new Date();
+
+// console.log("todaysDate", todaysDate.getDate());
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<ReadingsData>) {
 	res.status(200).json(todaysReadings);
