@@ -32,9 +32,9 @@ const commemorations = require(`../../lib/commemorations.${currentYear}.json`);
 todaysReadings.readings.unshift(...getReadingsMatchingDate(commemorations.readings));
 
 // get ocaSaintsReadings from "../../lib/saints.json"
-// const ocaSaintsReadings = require(`../../lib/saints.${currentYear}.json`);
+const ocaSaintsReadings = require(`../../lib/saints.${currentYear}.json`);
 
-// todaysReadings.push(getReadingsMatchingDate(ocaSaintsReadings));
+todaysReadings.readings.push(...getReadingsMatchingDate(ocaSaintsReadings.readings));
 
 type ReadingsData = {
 	readings: {
