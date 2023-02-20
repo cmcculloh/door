@@ -3,3 +3,12 @@
 @import "./components/Header.scss";
 
 @import "./components/Article.scss";
+
+#loading {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}

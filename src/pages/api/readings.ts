@@ -1,12 +1,23 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { read } from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getFromS3 } from "../../lib/aws.mjs";
 
 type Reading = {
 	title: string;
 	date: string;
 	contents: string;
 	source: string;
+};
+
+const noReadings = {
+	readings: [
+		{
+			title: "No Readings",
+			date: "No Readings",
+			contents: "No Readings",
+			source: "No Readings",
+		},
+	],
 };
 
 const getReadingsMatchingDate = (readings: any, date: Date = new Date()) =>
@@ -25,32 +36,45 @@ const getReadingsMatchingDate = (readings: any, date: Date = new Date()) =>
 const getMostRecentUnread = (readings: Reading[], lastRead: string) =>
 	readings.find((reading: any) => reading.title !== lastRead);
 
-// current year
-const currentYear = new Date().getFullYear();
+const getReadingsForDay = async (file: string) => {
+	const currentYear = new Date().getFullYear();
 
-// get oca readings from "../../lib/readings.json"
-const ocaScriptureReadings = require(`../../lib/readings.${currentYear}.json`);
+	// get oca readings from "../../lib/commemorations.json"
+	// const commemorations = require(`../../lib/commemorations.${currentYear}.json`);
+	const fileData =
+		(await getFromS3("dooreadings", `${file}.${currentYear}.json`)) ||
+		JSON.stringify(noReadings);
+	const allReadings = JSON.parse(fileData);
 
-// get ocaScriptureReadings whose date matches today's date
-const todaysReadings = {
-	readings: getReadingsMatchingDate(ocaScriptureReadings.readings),
+	const filteredReadings = getReadingsMatchingDate(allReadings.readings);
+
+	// return allReadings whose date matches today's date
+	return filteredReadings;
 };
 
-// get oca readings from "../../lib/commemorations.json"
-const commemorations = require(`../../lib/commemorations.${currentYear}.json`);
+const getNewestUnread = async (file: string) => {
+	// get only the latest post from "../../lib/ocanews.json"
+	// const ocaNews = require(`../../lib/ocanews.json`) as { readings: Reading[] };
+	const fileData = (await getFromS3("dooreadings", `${file}.json`)) || JSON.stringify(noReadings);
+	const ocaNews = JSON.parse(fileData);
 
-// get commemorations whose date matches today's date
-todaysReadings.readings.unshift(...getReadingsMatchingDate(commemorations.readings));
+	// return most recent unread post
+	return [getMostRecentUnread(ocaNews.readings, "")];
+};
 
-// get ocaSaintsReadings from "../../lib/saints.json"
-const ocaSaintsReadings = require(`../../lib/saints.${currentYear}.json`);
+const getTodaysReadings = async () => {
+	const todaysReadings = await Promise.all([
+		getReadingsForDay("commemorations"),
+		getReadingsForDay("readings"),
+		getReadingsForDay("saints"),
+		getNewestUnread("ocanews"),
+	]).then((results) => {
+		const readings = results.reduce((acc, curr) => [...acc, ...curr], []);
+		return { readings };
+	});
 
-todaysReadings.readings.push(...getReadingsMatchingDate(ocaSaintsReadings.readings));
-
-// get only the latest post from "../../lib/ocanews.json"
-const ocaNews = require(`../../lib/ocanews.json`) as { readings: Reading[] };
-
-todaysReadings.readings.push(getMostRecentUnread(ocaNews.readings, ""));
+	return todaysReadings;
+};
 
 type ReadingsData = {
 	readings: {
@@ -61,11 +85,9 @@ type ReadingsData = {
 	}[];
 };
 
-// console.log("todaysReadings", todaysReadings);
-// const todaysDate = new Date();
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ReadingsData>) {
+	const todaysReadings = await getTodaysReadings();
 
-// console.log("todaysDate", todaysDate.getDate());
-
-export default function handler(req: NextApiRequest, res: NextApiResponse<ReadingsData>) {
 	res.status(200).json(todaysReadings);
 }
+

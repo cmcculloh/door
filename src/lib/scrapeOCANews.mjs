@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import fs from "fs";
+import { saveToS3, getFromS3 } from "./aws.mjs";
 
 const getPageContents = () => {
 	const title = document.querySelector(".categories header h1").textContent;
@@ -77,7 +77,7 @@ const scrapeNewsForDay = async (
 				console.log("adding", reading.title, "to readings");
 				newReadings.push(reading);
 			} else {
-				console.log("existing reading fount", reading.title);
+				console.log("existing reading found", reading.title);
 				stopScraping = true;
 			}
 		} catch (error) {
@@ -105,7 +105,8 @@ const scrapeNews = async () => {
 
 	let readings;
 	try {
-		const fileData = fs.readFileSync(`ocanews.json`, "utf8");
+		// const fileData = fs.readFileSync(`ocanews.json`, "utf8");
+		const fileData = await getFromS3("dooreadings", "ocanews.json");
 		readings = JSON.parse(fileData);
 		// if readings.readings doesn't exist, create it
 		if (!readings.readings) {
@@ -116,10 +117,15 @@ const scrapeNews = async () => {
 	}
 
 	const newReadings = await scrapeNewsForDay(page, `https://www.oca.org/news`, readings.readings);
-	readings.readings = [...newReadings, ...readings.readings];
-	readings.lastUpdated = new Date();
 
-	fs.writeFileSync(`ocanews.json`, JSON.stringify(readings, null, "\t"));
+	// only saveToS3 if there are new readings
+	if (newReadings.length > 0) {
+		readings.readings = [...newReadings, ...readings.readings];
+		readings.lastUpdated = new Date();
+
+		// fs.writeFileSync(`ocanews.json`, JSON.stringify(readings, null, "\t"));
+		saveToS3("dooreadings", "ocanews.json", JSON.stringify(readings, null, "\t"));
+	}
 
 	await browser.close();
 };

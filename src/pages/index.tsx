@@ -24,8 +24,22 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Home() {
   const { data, error, isLoading } = useSwr<dataType>("/api/readings", fetcher);
 
-  if (error) return <div>Failed to load users</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div id="failure">Failed to load users</div>;
+  if (isLoading)
+		return (
+			<div id="loading">
+				<div className="slds-spinner_container">
+					<div
+						role="status"
+						className="slds-spinner slds-spinner_medium slds-spinner_brand"
+					>
+						<span className="slds-assistive-text">Loading</span>
+						<div className="slds-spinner__dot-a"></div>
+						<div className="slds-spinner__dot-b"></div>
+					</div>
+				</div>
+			</div>
+		);
   if (!data) return null;
 
 	return (
