@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import fs from "fs";
+import { saveToS3, getFromS3 } from "./aws.mjs";
 
 const scrapeCommemorationsForDay = async (page, commemorations = [], day, counter = 0) => {
 	await page.goto(`https://www.oca.org/readings/daily/${day}`);
