@@ -2,6 +2,13 @@
 import { read } from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+type Reading = {
+	title: string;
+	date: string;
+	contents: string;
+	source: string;
+};
+
 const getReadingsMatchingDate = (readings: any, date: Date = new Date()) =>
 	readings.filter((reading: any) => {
 		const readingDate = new Date(reading.date);
@@ -13,6 +20,10 @@ const getReadingsMatchingDate = (readings: any, date: Date = new Date()) =>
 			readingDate.getFullYear() === date.getFullYear()
 		);
 	});
+
+// loop through the user's read data and return the most recent unread post
+const getMostRecentUnread = (readings: Reading[], lastRead: string) =>
+	readings.find((reading: any) => reading.title !== lastRead);
 
 // current year
 const currentYear = new Date().getFullYear();
@@ -35,6 +46,11 @@ todaysReadings.readings.unshift(...getReadingsMatchingDate(commemorations.readin
 const ocaSaintsReadings = require(`../../lib/saints.${currentYear}.json`);
 
 todaysReadings.readings.push(...getReadingsMatchingDate(ocaSaintsReadings.readings));
+
+// get only the latest post from "../../lib/ocanews.json"
+const ocaNews = require(`../../lib/ocanews.json`) as { readings: Reading[] };
+
+todaysReadings.readings.push(getMostRecentUnread(ocaNews.readings, ""));
 
 type ReadingsData = {
 	readings: {
