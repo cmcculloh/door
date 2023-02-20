@@ -6,15 +6,16 @@ import scrapeCommemorations from "./scrapeCommemorations.mjs";
 import scrapeSaints from "./scrapeSaints.mjs";
 import scrapeOCANews from "./scrapeOCANews.mjs";
 
-const today = new Date();
-const year = today.getFullYear();
-const month = today.getMonth() + 1;
-const day = today.getDate();
+// const today = new Date();
+// const year = today.getFullYear();
+// const month = today.getMonth() + 1;
+// const day = today.getDate();
 
 // today in YYYY/MM/DD format
-const todayString = `${year}/${month}/${day}`;
+// const todayString = `${year}/${month}/${day}`;
+const todayString="2024/0/1";
 
-// scrapeReadings(todayString, year);
-// scrapeCommemorations(todayString, year);
-// scrapeSaints(todayString, year);
+scrapeReadings(todayString, 2024);
+scrapeCommemorations(todayString, 2024);
+scrapeSaints(todayString, 2024);
 scrapeOCANews();

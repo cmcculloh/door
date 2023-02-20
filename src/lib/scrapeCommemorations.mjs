@@ -55,7 +55,8 @@ const scrapeCommemorations = async (todayString, year) => {
 	// get current readings from readings.json
 	let readings;
 	try {
-		const fileData = fs.readFileSync(`commemorations.${year}.json`, "utf8");
+		// const fileData = fs.readFileSync(`commemorations.${year}.json`, "utf8");
+		const fileData = await getFromS3("dooreadings", `commemorations.${year}.json`);
 		readings = JSON.parse(fileData);
 	} catch (e) {
 		console.log("error reading file", e);
@@ -63,7 +64,8 @@ const scrapeCommemorations = async (todayString, year) => {
 
 	readings.readings = await scrapeCommemorationsForDay(page, readings.readings, todayString);
 
-	fs.writeFileSync(`commemorations.${year}.json`, JSON.stringify(readings, null, "\t"));
+	// fs.writeFileSync(`commemorations.${year}.json`, JSON.stringify(readings, null, "\t"));
+	saveToS3("dooreadings", `commemorations.${year}.json`, JSON.stringify(readings, null, "\t"));
 
 	await browser.close();
 };
