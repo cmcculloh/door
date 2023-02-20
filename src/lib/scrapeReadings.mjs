@@ -4,6 +4,7 @@
 import scrapeReadings from "./scrapeOCADailyReadings.mjs";
 import scrapeCommemorations from "./scrapeCommemorations.mjs";
 import scrapeSaints from "./scrapeSaints.mjs";
+import scrapeOCANews from "./scrapeOCANews.mjs";
 
 const today = new Date();
 const year = today.getFullYear();
@@ -15,4 +16,5 @@ const todayString = `${year}/${month}/${day}`;
 
 // scrapeReadings(todayString, year);
 // scrapeCommemorations(todayString, year);
-scrapeSaints(todayString, year);
+// scrapeSaints(todayString, year);
+scrapeOCANews();
