@@ -13,7 +13,7 @@ export default function About() {
 				<div>
 					<p>Feel free to contact me!</p>
 					<p>
-						My name is Christopher McCulloh, and I am a member at St. Constantine &
+						My name is Christopher McCulloh, and I am a member at Sts. Constantine &
 						Elena Orthodox Church in Indianapolis, IN.
 					</p>
 					<p>

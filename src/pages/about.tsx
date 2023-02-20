@@ -18,9 +18,10 @@ export default function About() {
 					</p>
 
 					<p>
-						It is so incredibly easy to get sucked into doomscrolling "the news" or your
-						"feed" on Facebook/Twitter/Insta, I wanted a one-stop-shop where it is just
-						as easy to get sucked into a more edifying infinite-scroll content feed.
+						It is so incredibly easy to get sucked into doomscrolling &quot;the
+						news&quot; or your &quot;feed&quot; on Facebook/Twitter/Insta, I wanted a
+						one-stop-shop where it is just as easy to get sucked into a more edifying
+						infinite-scroll content feed.
 					</p>
 
 					<p>
