@@ -17,8 +17,8 @@ export default function About() {
 						Elena Orthodox Church in Indianapolis, IN.
 					</p>
 					<p>
-						Eventually I'll put some sort of webform up here, but for now, you can just
-						do detective work.
+						Eventually I&apos;ll put some sort of webform up here, but for now, you can
+						just do detective work.
 					</p>
 				</div>
 			</main>
