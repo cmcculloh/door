@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getFromS3 } from "../../lib/aws.mjs";
+import { getFromS3 } from "../../lib/utils/aws.mjs/index.js";
 
 type Reading = {
 	title: string;
@@ -68,6 +68,7 @@ const getTodaysReadings = async () => {
 		getReadingsForDay("readings"),
 		getReadingsForDay("saints"),
 		getNewestUnread("ocanews"),
+		getNewestUnread("nootherfoundation"),
 	]).then((results) => {
 		const readings = results.reduce((acc, curr) => [...acc, ...curr], []);
 		return { readings };
