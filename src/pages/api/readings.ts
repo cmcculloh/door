@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getFromS3 } from "../../lib/utils/aws.mjs/index.js";
+import { getFromS3 } from "../../lib/utils/aws.mjs";
 
 type Reading = {
 	title: string;
