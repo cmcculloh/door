@@ -6,6 +6,7 @@ import scrapeCommemorations from "./scrapers/scrapeCommemorations.mjs";
 import scrapeSaints from "./scrapers/scrapeSaints.mjs";
 import scrapeOCANews from "./scrapers/scrapeOCANews.mjs";
 import scrapeFarley from "./scrapers/scrapeFarley.mjs";
+import scrapeMorningOffering from "./scrapers/scrapeMorningOffering.mjs";
 
 // const today = new Date();
 // const year = today.getFullYear();
@@ -16,8 +17,9 @@ import scrapeFarley from "./scrapers/scrapeFarley.mjs";
 // const todayString = `${year}/${month}/${day}`;
 const todayString = "2024/01/01";
 
-// scrapeReadings(todayString, 2024);
-// scrapeCommemorations(todayString, 2024);
+scrapeReadings(todayString, 2024);
+scrapeCommemorations(todayString, 2024);
 // scrapeSaints(todayString, 2024);
-scrapeOCANews();
-scrapeFarley();
+// scrapeOCANews();
+// scrapeFarley();
+// scrapeMorningOffering();

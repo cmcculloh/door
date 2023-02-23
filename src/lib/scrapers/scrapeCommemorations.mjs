@@ -1,13 +1,16 @@
 import { chromium } from "playwright";
-import { saveNewReadings, getCurrentReadings } from "../utils/fileAccess.mjs";
+import { saveReadings, getReadingsBySourceAndType } from "../utils/db.mjs";
+import throttle from "../utils/throttle.mjs";
+import addIfUnique from "../utils/addIfUnique.mjs";
+import getNextDay from "../utils/getNextDay.mjs";
 
 const scrapeCommemorationsForDay = async (page, commemorations = [], day, counter = 0) => {
 	const url = `https://www.oca.org/readings/daily/${day}`;
 	console.log("scraping", url);
 	await page.goto(url);
+	await throttle(page);
 
 	const reading = await page.evaluate(() => {
-		const title = `commemorations for today`;
 		const contents = document
 			.querySelector("#main-col-contents > section > p")
 			.innerHTML.replace(/  /, "");
@@ -15,32 +18,30 @@ const scrapeCommemorationsForDay = async (page, commemorations = [], day, counte
 		const contentsClean = contents.replace(/[\n\t]/g, "");
 
 		const dateString = document.querySelector("#content-header h2").textContent;
+		const title = `commemorations for ${dateString}`;
 
 		// convert date string "Saturday, February 18, 2023" to "2023-02-18"
-		const date = new Date(dateString).toISOString().slice(0, 10);
+		// const date = new Date(dateString).toISOString().slice(0, 10);
 
 		return {
-			title: title,
+			title,
 			contents: contentsClean,
-			source: window.location.href,
-			date,
+			url: window.location.href,
+			date: new Date(dateString),
+			type: "commemoration",
+			source: "oca",
+			scraped: new Date(),
 		};
 	});
 
-	commemorations.push(reading);
+	addIfUnique(commemorations, reading);
 
-	// get date of day + 1 in YYYY/MM/DD format
-	const nextDay = new Date(day);
-	nextDay.setDate(nextDay.getDate() + 1);
-	const nextDayYear = nextDay.getFullYear();
-	const nextDayMonth = nextDay.getMonth() + 1;
-	const nextDayDay = nextDay.getDate();
-	const nextDayString = `${nextDayYear}/${nextDayMonth}/${nextDayDay}`;
+	const { nextDayString, nextDayYear } = getNextDay(day);
 
 	// if we've scraped 7 days, stop
-	// if (counter === 0) {
-	// 	return commemorations;
-	// }
+	if (counter === 1) {
+		return commemorations;
+	}
 
 	// if year is the next year, stop
 	if (nextDayYear === new Date(day).getFullYear() + 1) {
@@ -54,11 +55,11 @@ const scrapeCommemorations = async (startDayString, year) => {
 	const browser = await chromium.launch({ headless: false });
 	const page = await browser.newPage();
 
-	const readings = await getCurrentReadings(`commemorations.${year}.json`);
+	const readings = await getReadingsBySourceAndType("oca", "commemoration");
 
-	const newReadings = await scrapeCommemorationsForDay(page, readings.readings, startDayString);
+	const newReadings = await scrapeCommemorationsForDay(page, readings, startDayString);
 
-	saveNewReadings(`commemorations.${year}.json`, readings, newReadings);
+	saveReadings(newReadings);
 
 	await browser.close();
 };

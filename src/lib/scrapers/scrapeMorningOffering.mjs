@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { saveReadings, getReadings } from "../utils/db.mjs";
+import { saveNewReadings, getCurrentReadings } from "../utils/fileAccess.mjs";
 
 const getPageContents = () => {
 	const title = document.querySelector("#main > article > header > h1").textContent;
@@ -11,8 +11,8 @@ const getPageContents = () => {
 	const date = new Date(
 		document.querySelector("#main > article > header time.published").textContent
 	);
-	// // date in YYYY/MM/DD format
-	// const dateClean = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+	// date in YYYY/MM/DD format
+	const dateClean = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 
 	const articleContents = [];
 
@@ -29,11 +29,8 @@ const getPageContents = () => {
 	return {
 		title: titleCleaner,
 		contents,
-		url: window.location.href,
-		date, //: dateClean,
-		type: "blog",
-		source: "nootherfoundation",
-		scraped: new Date(),
+		source: window.location.href,
+		date: dateClean,
 	};
 };
 
@@ -106,15 +103,15 @@ const scrapeNews = async () => {
 	const browser = await chromium.launch({ headless: false });
 	const page = await browser.newPage();
 
-	const readings = await getReadings(`nootherfoundation`);
+	const readings = await getCurrentReadings(`nootherfoundation.json`);
 
 	const newReadings = await scrapeNewsForDay(
 		page,
 		`https://blogs.ancientfaith.com/nootherfoundation/`,
-		readings
+		readings.readings
 	);
 
-	saveReadings(newReadings);
+	saveNewReadings(`nootherfoundation.json`, readings, newReadings);
 
 	await browser.close();
 };
