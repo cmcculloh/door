@@ -31,6 +31,34 @@ const getReadingsBySourceAndType = async (source, type) => {
 	return result;
 };
 
+const getReadingsForDate = async (date) => {
+	const result = await prisma.readings.findMany({
+		where: {
+			date: date,
+		},
+		orderBy: {
+			date: "asc",
+		},
+	});
+
+	return result;
+};
+
+// Get newest reading for each source and type
+const getNewestReadingForSourceAndType = async (source, type) => {
+	const result = await prisma.readings.findFirst({
+		where: {
+			source: source,
+			type: type,
+		},
+		orderBy: {
+			date: "desc",
+		},
+	});
+
+	return result;
+};
+
 const getReadings = async (source) => {
 	console.log("source", source);
 	const result = await prisma.readings.findMany({
@@ -79,6 +107,8 @@ const deleteReading = async (id) => {
 export {
 	saveReadings,
 	saveReading,
+	getReadingsForDate,
+	getNewestReadingForSourceAndType,
 	getReadingsBySourceAndType,
 	getReadings,
 	getReading,
