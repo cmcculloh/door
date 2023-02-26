@@ -2,13 +2,12 @@ import useSwr from "swr";
 import Head from "next/head";
 import Article from "../components/Article";
 
-import getDailyReadings from "../lib/getDailyReadings";
-
 type post = {
 	title: string;
 	date: string;
 	contents: string;
 	source: string;
+	url: string;
 };
 
 type dataType = {
@@ -22,10 +21,10 @@ type Props = {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
-  const { data, error, isLoading } = useSwr<dataType>("/api/readings", fetcher);
+	const { data, error, isLoading } = useSwr<dataType>("/api/readings", fetcher);
 
-  if (error) return <div id="failure">Failed to load users</div>;
-  if (isLoading)
+	if (error) return <div id="failure">Failed to load users</div>;
+	if (isLoading)
 		return (
 			<div id="loading">
 				<div className="slds-spinner_container">
@@ -40,7 +39,7 @@ export default function Home() {
 				</div>
 			</div>
 		);
-  if (!data) return null;
+	if (!data) return null;
 
 	return (
 		<>
@@ -57,7 +56,7 @@ export default function Home() {
 						title={post.title}
 						date={post.date}
 						contents={post.contents}
-						source={post.source}
+						source={post.url}
 					/>
 				))}
 			</main>
