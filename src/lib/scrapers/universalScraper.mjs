@@ -44,6 +44,7 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 	console.log("scraping", url);
 	await page.goto(url);
 
+	// console.log("getting links with selector", linksSelector);
 	const links = await page.$$eval(linksSelector, (as) => as.map((a) => a.href));
 
 	let nextURL;
@@ -54,7 +55,7 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 		console.log("no next button", error);
 	}
 
-	console.log("links", links);
+	// console.log("links", links);
 	let stopScraping = false;
 
 	for (const link of links) {
@@ -101,6 +102,8 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 			existingReadings,
 			newReadings,
 			counter: counter + 1,
+			linksSelector,
+			nextSelector,
 		},
 		pageScrapeOpts
 	);
