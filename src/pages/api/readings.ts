@@ -14,7 +14,7 @@ type ReadingsData = {
 
 const sources = [
 	{ source: "nootherfoundation", type: "blog" },
-	{ source: "morningoffering", type: "blog" },
+	// { source: "morningoffering", type: "blog" },
 	{ source: "oca", type: "news" },
 ];
 
