@@ -32,9 +32,17 @@ const getReadingsBySourceAndType = async (source, type) => {
 };
 
 const getReadingsForDate = async (date) => {
+	// get date in YYYY-MM-DD format, add a day
+	const datePlusOne = new Date(date);
+	datePlusOne.setDate(datePlusOne.getDate() + 1);
+
+	console.log("date", date);
 	const result = await prisma.readings.findMany({
 		where: {
-			date: date,
+			date: {
+				gte: new Date(date.toISOString().split("T")[0]),
+				lt: new Date(datePlusOne.toISOString().split("T")[0]),
+			},
 		},
 		orderBy: {
 			date: "asc",
