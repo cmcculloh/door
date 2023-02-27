@@ -35,21 +35,42 @@ const getReadingsForDate = async (date) => {
 	// get date in YYYY-MM-DD format, add a day
 	const datePlusOne = new Date(date);
 	datePlusOne.setDate(datePlusOne.getDate() + 1);
+	const dateFilter = {
+		gte: new Date(date.toISOString().split("T")[0]),
+		lt: new Date(datePlusOne.toISOString().split("T")[0]),
+	};
 
-	console.log("date", date);
-	const result = await prisma.readings.findMany({
+	const commemorations = await prisma.readings.findFirst({
 		where: {
-			date: {
-				gte: new Date(date.toISOString().split("T")[0]),
-				lt: new Date(datePlusOne.toISOString().split("T")[0]),
-			},
-		},
-		orderBy: {
-			date: "asc",
+			source: "oca",
+			type: "commemoration",
+			date: dateFilter,
 		},
 	});
 
-	return result;
+	const readings = await prisma.readings.findMany({
+		where: {
+			source: "oca",
+			type: "reading",
+			date: dateFilter,
+		},
+		orderBy: {
+			scraped: "asc",
+		},
+	});
+
+	const saints = await prisma.readings.findMany({
+		where: {
+			source: "oca",
+			type: "saints",
+			date: dateFilter,
+		},
+		orderBy: {
+			scraped: "asc",
+		},
+	});
+
+	return [commemorations, ...readings, ...saints];
 };
 
 // Get newest reading for each source and type
