@@ -8,7 +8,7 @@ const scrapeCommemorationsForDay = async (page, commemorations = [], day, counte
 	const url = `https://www.oca.org/readings/daily/${day}`;
 	console.log("scraping", url);
 	await page.goto(url);
-	await throttle(page);
+	// await throttle(page);
 
 	const reading = await page.evaluate(() => {
 		const contents = document
@@ -23,11 +23,15 @@ const scrapeCommemorationsForDay = async (page, commemorations = [], day, counte
 		// convert date string "Saturday, February 18, 2023" to "2023-02-18"
 		// const date = new Date(dateString).toISOString().slice(0, 10);
 
+		const date = new Date(dateString);
+		// 1AM on the day of the date
+		// date.setHours(1);
+
 		return {
 			title,
 			contents: contentsClean,
 			url: window.location.href,
-			date: new Date(dateString),
+			date: date,
 			type: "commemoration",
 			source: "oca",
 			scraped: new Date(),
@@ -39,9 +43,9 @@ const scrapeCommemorationsForDay = async (page, commemorations = [], day, counte
 	const { nextDayString, nextDayYear } = getNextDay(day);
 
 	// if we've scraped 7 days, stop
-	if (counter === 1) {
-		return commemorations;
-	}
+	// if (counter === 1) {
+	// 	return commemorations;
+	// }
 
 	// if year is the next year, stop
 	if (nextDayYear === new Date(day).getFullYear() + 1) {
@@ -51,7 +55,7 @@ const scrapeCommemorationsForDay = async (page, commemorations = [], day, counte
 	return await scrapeCommemorationsForDay(page, commemorations, nextDayString, counter + 1);
 };
 
-const scrapeCommemorations = async (startDayString, year) => {
+const scrapeCommemorations = async (startDayString) => {
 	const browser = await chromium.launch({ headless: false });
 	const page = await browser.newPage();
 
