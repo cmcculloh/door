@@ -2,7 +2,8 @@ import { chromium } from "playwright";
 import { saveReadings, getReadings } from "../utils/db.mjs";
 
 const scrapePage = (opts) => {
-	const { titleSelector, dateSelector, contentsSelector, type, source } = opts;
+	const { titleSelector, dateSelector, imgSelector, contentsSelector, type, source, forceYear } =
+		opts;
 
 	const title = document.querySelector(titleSelector).textContent;
 	// strip special characters from title
@@ -12,7 +13,18 @@ const scrapePage = (opts) => {
 
 	const date = new Date(document.querySelector(dateSelector).textContent);
 
+	if (forceYear) {
+		date.setFullYear(forceYear);
+	}
+
 	const articleContents = [];
+
+	if (imgSelector) {
+		const imgLink = document.querySelector(imgSelector);
+		if (imgLink) {
+			articleContents.push(`<p>${imgLink.innerHTML}</p>`);
+		}
+	}
 
 	document.querySelectorAll(contentsSelector).forEach((el) => {
 		articleContents.push(el.outerHTML);
@@ -40,6 +52,8 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 		counter = 0,
 		linksSelector,
 		nextSelector,
+		limit = 0,
+		ignoreExisting = false,
 	} = opts;
 	console.log("scraping", url);
 	await page.goto(url);
@@ -71,8 +85,10 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 			// scrape data
 			const reading = await page.evaluate(scrapePage, pageScrapeOpts);
 
+			const alreadyExists = existingReadings.find((r) => r.title === reading.title);
+
 			// if reading isn't already in array, add it
-			if (!existingReadings.find((r) => r.title === reading.title)) {
+			if (ignoreExisting || !alreadyExists) {
 				console.log("adding", reading.title, "to readings");
 				newReadings.push(reading);
 			} else {
@@ -86,9 +102,9 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 	}
 
 	// if we've scraped 7 days, stop
-	// if (counter === 0) {
-	// 	return newReadings;
-	// }
+	if (limit > 0 && counter === limit) {
+		return newReadings;
+	}
 
 	// if nextURL is undefined, stop
 	if (!nextURL || stopScraping) {
@@ -104,6 +120,8 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 			counter: counter + 1,
 			linksSelector,
 			nextSelector,
+			limit,
+			ignoreExisting,
 		},
 		pageScrapeOpts
 	);
