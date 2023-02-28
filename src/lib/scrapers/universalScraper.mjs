@@ -129,7 +129,7 @@ const scrapePages = async (opts, pageScrapeOpts) => {
 
 const scrapeNewReadings = async (opts, pageScrapeOpts) => {
 	// console.log("opts", opts, "pageScrapeOpts", pageScrapeOpts);
-	const browser = await chromium.launch({ headless: false });
+	const browser = await chromium.launch({ headless: true });
 
 	opts.page = await browser.newPage();
 	opts.existingReadings = await getReadings(pageScrapeOpts.source);
