@@ -5,7 +5,7 @@
 	article > header {
 		background: var(--color-bg-0);
 		color: var(--color-theme-1);
-		padding: 1px 10px;
+		padding: 1px 10px 1px 0;
 		border-bottom: 1px solid grey;
 	}
 
@@ -29,7 +29,6 @@
 
 	article > div {
 		margin: 20px;
-		margin-bottom: 50px;
 	}
 
 	.collapsed div {
